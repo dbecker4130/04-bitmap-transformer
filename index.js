@@ -12,8 +12,8 @@ bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
   console.log(bitMapData.getColorArray());
   console.log(bitMapData.getPixelArray());
 
-  bmHelper.save('./img/test.bmp', bitMapData, function(err, data) {
-    if(err) console.log('error:', err); //TODO: Just log for test
-    console.log('data:', data);
-  });
+  // bmHelper.save('./img/test.bmp', bitMapData, function(err, data) {
+  //   if(err) console.log('error:', err); //TODO: Just log for test
+  //   console.log('data:', data);
+  // });
 });
