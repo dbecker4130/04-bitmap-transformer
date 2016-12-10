@@ -2,6 +2,7 @@
 
 //NOTE: I prefer buf to buff -Geoff
 function Bitmap(buf) {
+  this.buf = buf;
   this.type = buf.toString('utf-8', 0, 2);
 
   // TODO: check that the type is what we can handle/expect.
