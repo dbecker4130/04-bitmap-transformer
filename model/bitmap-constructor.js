@@ -53,6 +53,8 @@ Bitmap.prototype = {
 };
 */
 
+// ---------- GETTERS -----------------
+
 Bitmap.prototype.getType = function() {
   return this.buf.toString('utf-8', 0, 2);
 };
@@ -91,7 +93,45 @@ Bitmap.prototype.getPixelArray = function() {
   return pixels;
 };
 
+// ---------- SETTERS -----------------
+Bitmap.prototype.setWidth(width) {
+  //TODO: How do we deal with a change in width?
+  //      If this is changed without a change to
+  //      the pixel array, the image will
+  //      be very weird.
+  return this; //To chain seters
+};
+Bitmap.prototype.setHeight(height) {
+  //NOTE: Same concerns as with width.
+  return this; //To chain seters
+};
+//Convenience proxy method.
+Bitmap.prototype.setDimensions(width, height) {
+  this.setWidth(width);
+  this.setHeight(height);
+  return this; //To chain seters
+};
+Bitmap.prototype.setColorArray(colors) {
+  //TODO: Check length of colors = this.getColorArray()
+  //TODO: Check that the items in the array are valid color objects
+  //        { red, blue, green, alpha } Order doesn't matter.
+  //TODO: Write the colors array back into this.buf
+  //TODO: Make sure for each color object, that we write
+  //      the bytes in the correct order. See getColorArray
+  return this; //To chain seters
+};
+Bitmap.prototype.setPixelArray(pixels) {
+  // pixels should be an array of bytes
+  //TODO: Does pixels.length == this.getPixelArray().length?
+  //      What do we do if it doesn't?
+  //TODO: Are the values in pixels within the size of our color array?
+  //TODO: Write the pixels to this.buf, see getPixelArray
+  return this; //To chain seters
+};
+
 Bitmap.prototype.transform = function(operator) {
+  operator(this); //Let the operator mess with this
+  return this; //To chain transforms
 }
 
 module.exports = exports = {};
