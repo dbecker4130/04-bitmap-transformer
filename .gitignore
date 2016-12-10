@@ -98,5 +98,5 @@ tags
 # auto-generated tag files
 
 ### project specific ###
-/temp
-/img/test.bmp
+temp
+img/test.bmp
