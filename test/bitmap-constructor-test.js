@@ -1,14 +1,29 @@
 'use strict';
 
 const expect = require('chai').expect;
-const BMC = require('../model/bitmap-constructor.js');
+const Bitmap = require('../model/bitmap-constructor.js').Bitmap;
+const helper = require('../lib/bitmap-file-helper.js');
+
+//NOTE: test runs from project root, so we use . instead of ..
+const testFilepath = './img/palette-bitmap.bmp';
 
 describe('Bitmap Constructor', function() {
+  var testBitmap;
+  before('loading test bitmap with helper', function(done) {
+    helper.load(testFilepath, function(err, data) {
+      if(err) return done(err);
+      // console.log('setting testBitmap =',data);
+      testBitmap = data;
+      done();
+    });
+  });
+
   describe('#Bitmap', function() {
     it('should fail on a bogus buffer', function() {
       //TODO: Try new Bitmap() and new Bitmap(junk)
     });
     it('should create a bitmap with a valid buffer', function() {
+      expect(testBitmap).to.be.an.instanceof(Bitmap);
       //TODO: Where does the buffer get created?
       //      Do we need to use an async test here?
       //TODO: Verify that we get a valid bitmap object for the buf
@@ -20,14 +35,18 @@ describe('Bitmap Constructor', function() {
 
   describe('#getType', function() {
     it('should return a valid type', function() {
-      //TODO: A valid type is a 2 character string.
-      //TODO: Check the wiki spec for valid types.
+      // console.log('testBitmap:',testBitmap);
+      var type = testBitmap.getType();
+      expect(type).to.be.a('string');
+      expect(type).to.equal('BM');
     });
   });
 
   describe('#getWidth', function() {
     it('should match the width of our test bitmap', function() {
-      //TODO: assert that the width of our test BM matches what we expect.
+      var width = testBitmap.getWidth();
+      expect(width).to.be.a('number');
+      expect(width).to.equal(100);
     });
   });
 
@@ -49,12 +68,20 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#getPixelArray', function() {
+    // console.log('testBitmap:',testBitmap);
     it('should be an array', function() {
-      //TODO: Check the typeof
+      var pixels = testBitmap.getPixelArray();
+      expect(pixels).to.be.an('array');
     });
-    it('should have elements that are bytes', function() {
+    it('should have elements that are numbers', function() {
+      //TODO: Test for different size color tables, but
+      //      for now we can just test our single case.
+      var pixels    = testBitmap.getPixelArray();
+      var numPixels = testBitmap.getWidth() * testBitmap.getHeight();
+      expect(pixels).to.have.lengthOf(numPixels);
       //TODO: Iterate the array to see if the values
       //      are in the range we expect.
+      //  OR  We can compare the SHA of pixels to a known result.
     });
   });
 
@@ -95,8 +122,26 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#setPixelArray', function() {
-    it('should correctly alter the pixel array', function() {
-      //TODO: Similar process to the other set tests
+
+    it('should correctly alter the pixel array', function(done) {
+      //Since we are altering a bitmap, we are loading
+      //another copy of the bitmap to see if we can
+      //make the changes we expect.
+      helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
+        var bm = data;
+        var pixels = bm.getPixelArray();
+        for(let i in pixels) {
+          pixels[i] = 0; //Setting all pixels to color 0.
+        }
+        bm.setPixelArray(pixels);
+        //Now check that we get back the same pixels we just set.
+        pixels = bm.getPixelArray();
+        for(let i in pixels) {
+          expect(pixels[i]).to.equal(0);
+        }
+        done();
+      });
     });
     it('should fail with bogus values', function() {
       //TODO: Try with null, empty, strings, etc
