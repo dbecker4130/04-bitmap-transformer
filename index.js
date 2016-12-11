@@ -16,4 +16,15 @@ bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
   //   if(err) console.log('error:', err); //TODO: Just log for test
   //   console.log('data:', data);
   // });
+
+  var pixels = bitMapData.getPixelArray();
+  for(let i in pixels) {
+    pixels[i] = 0; //Setting all pixels to color 0.
+  }
+  bitMapData.setPixelArray(pixels);
+  bmHelper.save('./temp/black.bmp', bitMapData, function(err, data) {
+    if(err) console.log(err);
+    console.log('done saving data:', data);
+  });
+
 });
