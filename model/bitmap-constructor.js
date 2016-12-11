@@ -91,11 +91,28 @@ Bitmap.prototype.setColorArray = function(colors) {
   return this; //To chain seters
 };
 Bitmap.prototype.setPixelArray = function(pixels) {
+  //TODO: Possibly make a getPixelOffset method
+  var pixelOffset = this.buf.readUInt32LE(10);
+  var numPixels = this.getWidth() * this.getHeight();
+
   // pixels should be an array of bytes
   //TODO: Does pixels.length == this.getPixelArray().length?
   //      What do we do if it doesn't?
+  if(pixels.length !== numPixels) {
+    // In an async pattern, we'd return callback(new Error('pixels length does not match'));
+    // However, perhaps we should just write out the
+    // min of either pixels.length or numPixels.
+  }
+
   //TODO: Are the values in pixels within the size of our color array?
-  //TODO: Write the pixels to this.buf, see getPixelArray
+
+  var numToWrite = Math.min(pixels.length, numPixels);
+
+  for (let i = 0; i < numToWrite; i++) {
+    var offset = pixelOffset + i;
+    this.buf.writeUInt8(pixels[i], offset);
+  }
+
   return this; //To chain seters
 };
 
