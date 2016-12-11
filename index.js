@@ -1,6 +1,7 @@
 'use strict';
 
 const bmHelper = require('./lib/bitmap-file-helper.js');
+const transforms = require('./model/transform-constructor.js');
 
 //TODO: I suggest we change bitMapData to bitmap. -Geoff
 bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
@@ -17,14 +18,28 @@ bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
   //   console.log('data:', data);
   // });
 
-  var pixels = bitMapData.getPixelArray();
+  // makeBlackAndSave(bitMapData);
+  rotateRightAndSave(bitMapData);
+
+});
+
+function rotateRightAndSave(bitmap) {
+  bitmap.transform(transforms.rotateRight);
+  bmHelper.save('./temp/rotated-90.bmp', bitmap, function(err, data) {
+    if(err) console.log(err);
+    console.log('done saving rotated data:', data);
+  });
+}
+
+function makeBlackAndSave(bitmap) {
+  var pixels = bitmap.getPixelArray();
   for(let i in pixels) {
     pixels[i] = 0; //Setting all pixels to color 0.
   }
-  bitMapData.setPixelArray(pixels);
-  bmHelper.save('./temp/black.bmp', bitMapData, function(err, data) {
+  bitmap.setPixelArray(pixels);
+  bmHelper.save('./temp/black.bmp', bitmap, function(err, data) {
     if(err) console.log(err);
     console.log('done saving data:', data);
   });
 
-});
+}
