@@ -84,7 +84,7 @@ Bitmap.prototype.setDimensions = function(width, height) {
 Bitmap.prototype.setColorArray = function(colors) {
   var dibSize = this.buf.readUInt32LE(14);
   var colorsOffset = dibSize + 14;
-  var numColors = this.getColorArray.length;
+  var numColors = this.getColorArray().length;
   //TODO: Check length of colors = this.getColorArray()
   if(colors.length !== numColors) {
     // What does in here? Return an error?
@@ -108,7 +108,7 @@ Bitmap.prototype.setColorArray = function(colors) {
   //      the bytes in the correct order. See getColorArray
   for (let i = 0; i < numColors; i++) {
     var offset = colorsOffset + i;
-    this.buf.writeUInt32LE(colors[i], offset);
+    this.buf.writeUInt32LE(colors[i], offset); // NOTE have to write out in same order that we read them
   }
   return this; //To chain seters
 };
