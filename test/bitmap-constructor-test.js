@@ -134,19 +134,35 @@ describe('Bitmap Constructor', function() {
       helper.load(testFilepath, function(err, data) {
         var bm = data;
         var colors = bm.getColorArray();
-        colors = {};
+        // colors = {}; // TODO object is not array
         for (let i = 0; i < colors.length; i++) {
-          expect(colors[i]).to.be.an('error');
+          var tempArray = [];
+          expect(bm.setColorArray(tempArray)).to.throw('error');
+          expect(bm.setColorArray({})).to.throw('error');
+          expect(bm.setColorArray('blah')).to.throw('error');
+          expect(bm.setColorArray([{notAValidColor: 4000}])).to.throw('error');
         }
+        done();
+      });
+    });
+
+    it('should fail with non-color object values', function(done) {
         //TODO: Try an array with bogus or non-color object values.
-        colors = {a: 'puppy', b: 'kitten', c: 'capybara'};
+      helper.load(testFilepath, function(err, data) {
+        var colors = [{a: 'puppy'}, {b: 'kitten'}, {c: 'capybara'}];
         for (let i = 0; i < colors.length; i++) {
-          expect(colors[i]).to.be.an('error');
+          expect(colors[i]).to.throw('error');
         }
+        done();
+      });
+    });
+
+    it('should fail with color object that contain invalid values', function(done) {
         //TODO: Try with color objects that have invalid values.
-        colors = {yellow: 345, magenta: 800, chartreuse: 256};
+      helper.load(testFilepath, function(err, data) {
+        var colors = [{yellow: 345}, {magenta: 800}, {chartreuse: 256}]; // TODO make this an array
         for (let i = 0; i < colors.length; i++) {
-          expect(colors[i]).to.be.an('error');
+          expect(colors[i]).to.throw('error');
         }
         done();
       });

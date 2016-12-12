@@ -87,6 +87,7 @@ Bitmap.prototype.setColorArray = function(colors) {
   //TODO: Check length of colors = this.getColorArray()
   if(colors.length !== numColors) {
     // What does in here? Return an error?
+    return new Error;
   }
   //TODO: Check that the items in the array are valid color objects
   //        { red, blue, green, alpha } Order doesn't matter.
@@ -96,15 +97,17 @@ Bitmap.prototype.setColorArray = function(colors) {
     // if (colors[i])
     if (typeof(colors[i]) !== 'object') {
       // return error? what do we want to do here?
+      return new Error;
     }
     if ((!colors[i].hasOwnProperty('blue')) || (!colors[i].hasOwnProperty('red')) || (!colors[i].hasOwnProperty('green')) || (!colors[i].hasOwnProperty('alpha'))) {
       // return error? what do we want to do here?
+      return new Error;
     }
     if ((colors[i].blue > 255) || (colors[i].red > 255) || (colors[i].green > 255) || (colors[i].alpha > 255)) {
       // return error? what do we want to do here?
     }
   }
-  
+
   //TODO: Write the colors array back into this.buf
   //TODO: Make sure for each color object, that we write
   //      the bytes in the correct order. See getColorArray
