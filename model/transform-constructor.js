@@ -42,3 +42,13 @@ exports.rotate = function(angle) {
     }
   };
 };
+
+exports.swapColor = function(index, color) {
+  //TODO: Verify color is a valid color object
+  return function(bitmap) {
+    var colors = bitmap.getColorArray();
+    //TODO: Check 0 < index < colors.length
+    colors[index] = color;
+    bitmap.setColorArray(colors);
+  };
+};
