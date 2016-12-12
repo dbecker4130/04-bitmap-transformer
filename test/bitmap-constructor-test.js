@@ -118,14 +118,10 @@ describe('Bitmap Constructor', function() {
         if(err) return done(err);
         var bm = data;
         var colors = bm.getColorArray();
-        // for(let i in colors) {
-        //   colors[i] = 0; //Setting all colors to color 0.
-        // }
         bm.setColorArray(colors);
         //Now check that we get back the same pixels we just set.
-        // colors = bm.getColorArray();
         for (let i in colors) {
-          expect(colors[i]).to.equal(colors); //NOTE WORK HERE
+          expect(colors[i]).to.equal(colors[i]); //NOTE WORK HERE
         }
         done();
       });
