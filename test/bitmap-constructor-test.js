@@ -132,6 +132,7 @@ describe('Bitmap Constructor', function() {
     it('should fail with bogus values', function(done) {
       //TODO: Try with null, empty, strings, etc
       helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
         var bm = data;
         var colors = bm.getColorArray();
         // colors = {}; // TODO object is not array
@@ -149,12 +150,13 @@ describe('Bitmap Constructor', function() {
     it('should fail with non-color object values', function(done) {
         //TODO: Try an array with bogus or non-color object values.
       helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
         var bm = data;
         // let colors = [{a: 'puppy'}, {b: 'kitten'}, {c: 'capybara'}];
-        let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'magenta'];
-        for (let i = 0; i < colors.length; i++) {
+        let animals = [{animal: 'kitten'}, {animal: 'puppy'}, {animal: 'capybara'}];
+        for (let i = 0; i < animals.length; i++) {
           // expect(colors[i]).to.throw('error');
-          expect(bm.setColorArray(colors[i])).to.throw('error');
+          expect(bm.setColorArray(animals[i])).to.throw('error');
         }
         done();
       });
@@ -163,9 +165,11 @@ describe('Bitmap Constructor', function() {
     it('should fail with color object that contain invalid values', function(done) {
         //TODO: Try with color objects that have invalid values.
       helper.load(testFilepath, function(err, data) {
-        var colors = [{yellow: 345}, {magenta: 800}, {chartreuse: 256}]; // TODO make this an array
-        for (let i = 0; i < colors.length; i++) {
-          expect(colors[i]).to.throw('error');
+        if(err) return done(err);
+        var bm = data;
+        var numbers = [{yellow: 345}, {magenta: 800}, {chartreuse: 256}]; // TODO make this an array
+        for (let i = 0; i < numbers.length; i++) {
+          expect(bm.setColorArray(numbers[i])).to.throw('error');
         }
         done();
       });
