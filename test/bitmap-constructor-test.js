@@ -113,7 +113,6 @@ describe('Bitmap Constructor', function() {
   describe('#setColorArray', function() {
     it('should correctly alter the color array', function(done) {
       //TODO: Similar process to the other set tests
-      //NOTE: code below mirrors that from #setPixelArray
       helper.load(testFilepath, function(err, data) {
         if(err) return done(err);
         var bm = data;
@@ -121,7 +120,7 @@ describe('Bitmap Constructor', function() {
         bm.setColorArray(colors);
         //Now check that we get back the same pixels we just set.
         for (let i in colors) {
-          expect(colors[i]).to.equal(colors[i]); //NOTE WORK HERE
+          expect(colors[i]).to.equal(colors[i]);
         }
         done();
       });
@@ -131,24 +130,16 @@ describe('Bitmap Constructor', function() {
       helper.load(testFilepath, function(err, data) {
         var bm = data;
         var colors = bm.getColorArray();
-        bm.setColorArray(colors);
-
-        colors = [];
+        colors = {};
         for (let i = 0; i < colors.length; i++) {
-          // expect(colors[i]).to.be.equal(null);
           expect(colors[i]).to.be.an('error');
         }
-        
         //TODO: Try an array with bogus or non-color object values.
-        bm.setColorArray(colors);
-
         colors = {a: 'puppy', b: 'kitten', c: 'capybara'};
         for (let i = 0; i < colors.length; i++) {
           expect(colors[i]).to.return.err; // NOTE TO SELF: is this err set up yet?
         }
         //TODO: Try with color objects that have invalid values.
-        bm.setColorArray(colors);
-
         colors = {yellow: 345, magenta: 800, chartreuse: 256};
         for (let i = 0; i < colors.length; i++) {
           expect(colors[i]).to.return.err;

@@ -91,7 +91,7 @@ Bitmap.prototype.setColorArray = function(colors) {
   //TODO: Check that the items in the array are valid color objects
   //        { red, blue, green, alpha } Order doesn't matter.
   // NOTE line 95 - 106 to be put back in at later time, do not delete
-  /*
+
   for (let i = 0; i < numColors; i++) {
     // if (colors[i])
     if (typeof(colors[i]) !== 'object') {
@@ -104,7 +104,7 @@ Bitmap.prototype.setColorArray = function(colors) {
       // return error? what do we want to do here?
     }
   }
-  */
+  
   //TODO: Write the colors array back into this.buf
   //TODO: Make sure for each color object, that we write
   //      the bytes in the correct order. See getColorArray
