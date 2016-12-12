@@ -37,4 +37,17 @@ describe('Transform Constructor', function() {
       });
     });
   });
+
+  describe('#rotate', function() {
+    it('should fail with bogus angles', function() {
+      //TODO: expect(transforms.rotate(55)).to.fail();
+      //Q: Will a bad or missing angle throw an error, or what?
+    });
+    it('should handle negative angles in multiples of 90', function() {
+
+    });
+    it('should handle positive angles in multiples of 90', function() {
+
+    });
+  });
 });

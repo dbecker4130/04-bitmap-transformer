@@ -19,9 +19,17 @@ bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
   // });
 
   // makeBlackAndSave(bitMapData);
-  rotateRightAndSave(bitMapData);
-
+  // rotateRightAndSave(bitMapData);
+  rotate180AndSave(bitMapData);
 });
+
+function rotate180AndSave(bitmap) {
+  bitmap.transform(transforms.rotate(180));
+  bmHelper.save('./temp/rotated-180.bmp', bitmap, function(err) {
+    if(err) console.log(err);
+    console.log('saved rotated 180 bmp');
+  });
+}
 
 function rotateRightAndSave(bitmap) {
   bitmap.transform(transforms.rotateRight);
