@@ -82,12 +82,39 @@ Bitmap.prototype.setDimensions = function(width, height) {
   return this; //To chain seters
 };
 Bitmap.prototype.setColorArray = function(colors) {
+  var dibSize = this.buf.readUInt32LE(14);
+  var numColors = this.buf.readInt32LE(46);
   //TODO: Check length of colors = this.getColorArray()
+  if(colors.length !== numColors) {
+    // What does in here? Return an error?
+  }
   //TODO: Check that the items in the array are valid color objects
   //        { red, blue, green, alpha } Order doesn't matter.
+  // NOTE line 95 - 106 to be put back in at later time, do not delete
+  /*
+  for (let i = 0; i < numColors; i++) {
+    // if (colors[i])
+    if (typeof(colors[i]) !== 'object') {
+      // return error? what do we want to do here?
+    }
+    if ((!colors[i].hasOwnProperty('blue')) || (!colors[i].hasOwnProperty('red')) || (!colors[i].hasOwnProperty('green')) || (!colors[i].hasOwnProperty('alpha'))) {
+      // return error? what do we want to do here?
+    }
+    if ((colors[i].blue > 255) || (colors[i].red > 255) || (colors[i].green > 255) || (colors[i].alpha > 255)) {
+      // return error? what do we want to do here?
+    }
+  }
+  */
   //TODO: Write the colors array back into this.buf
   //TODO: Make sure for each color object, that we write
   //      the bytes in the correct order. See getColorArray
+  var position = dibSize + 14;
+  for (let i = 0; i < numColors; i++) {
+    this.buf.writeUInt8(colors[i].blue, position++);
+    this.buf.writeUInt8(colors[i].green, position++);
+    this.buf.writeUInt8(colors[i].red, position++);
+    this.buf.writeUInt8(colors[i].alpha, position++);
+  }
   return this; //To chain seters
 };
 Bitmap.prototype.setPixelArray = function(pixels) {
