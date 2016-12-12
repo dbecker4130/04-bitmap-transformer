@@ -143,9 +143,35 @@ describe('Bitmap Constructor', function() {
         done();
       });
     });
-    it('should fail with bogus values', function() {
-      //TODO: Try with null, empty, strings, etc
-      //TODO: Try an array with some bogus and/or out of range numbers.
+    it('should fail with bogus values', function(done) {
+      helper.load(testFilepath, function(err, bitmap) {
+        if(err) return done(err);
+        expect(function() {
+          bitmap.setPixelArray();
+        }).to.throw(Error);
+        expect(function() {
+          bitmap.setPixelArray('hi there, I am not an array');
+        }).to.throw(Error);
+        expect(function() {
+          bitmap.setPixelArray(null);
+        }).to.throw(Error);
+
+        var pixels = bitmap.getPixelArray();
+        pixels[0] = 'this is not a valid pixel value';
+        expect(function() {
+          bitmap.setPixelArray(pixels);
+        }).to.throw(Error);
+        pixels[0] = 2734734; //Big ass index
+        expect(function() {
+          bitmap.setPixelArray(pixels);
+        }).to.throw(Error);
+        pixels[0] = -200;
+        expect(function() {
+          bitmap.setPixelArray(pixels);
+        }).to.throw(Error);
+
+        done();
+      });
     });
   });
 
