@@ -106,9 +106,12 @@ Bitmap.prototype.setColorArray = function(colors) {
   //TODO: Write the colors array back into this.buf
   //TODO: Make sure for each color object, that we write
   //      the bytes in the correct order. See getColorArray
+  var position = dibSize + 14;
   for (let i = 0; i < numColors; i++) {
-    var offset = colorsOffset + i;
-    this.buf.writeUInt32LE(colors[i], offset); // NOTE have to write out in same order that we read them
+    this.buf.writeUInt8(colors[i].blue, position++);
+    this.buf.writeUInt8(colors[i].green, position++);
+    this.buf.writeUInt8(colors[i].red, position++);
+    this.buf.writeUInt8(colors[i].alpha, position++);
   }
   return this; //To chain seters
 };
