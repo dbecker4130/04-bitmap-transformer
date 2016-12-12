@@ -25,3 +25,20 @@ exports.rotateRight = function(bitmap) {
 
   bitmap.setPixelArray(dest);
 };
+
+// example of a constructor that takes in a param and returns
+//  the transform function that uses the param.
+exports.rotate = function(angle) {
+  if(!angle) throw new Error('missing angle param');
+  if(angle % 90 !== 0) throw new Error('angle not a multiple of 90');
+  return function(bitmap) {
+    var steps = angle / 90;
+    var phase = steps % 4;
+    // -3 < phase < 3
+    if(phase < 0) phase += 4;
+    // 0 < phase < 3
+    for(let i = 0; i < phase; i++) {
+      bitmap.transform(exports.rotateRight);
+    }
+  };
+};
