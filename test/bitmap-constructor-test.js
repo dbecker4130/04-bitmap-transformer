@@ -111,21 +111,6 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#setColorArray', function() {
-    // it('should correctly alter the color array', function(done) {
-    //   //TODO: Similar process to the other set tests
-    //   helper.load(testFilepath, function(err, data) {
-    //     if(err) return done(err);
-    //     var bm = data;
-    //     var colors = bm.getColorArray();
-    //     bm.setColorArray(colors);
-    //     //Now check that we get back the same pixels we just set.
-    //     for (let i in colors) {
-    //       expect(colors[i]).to.equal(colors[i]);
-    //     }
-    //     done();
-    //   });
-    // });
-
     it('should correctly alter the color array', function(done) {
       helper.load(testFilepath, function (err, data) {
         if(err) return done(err);
