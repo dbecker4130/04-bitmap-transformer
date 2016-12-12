@@ -124,15 +124,11 @@ Bitmap.prototype.setPixelArray = function(pixels) {
   if(!Array.isArray(pixels)) {
     throw new Error('invalid pixel array');
   }
-
   //TODO: Possibly make a getPixelOffset method
   var pixelOffset = this.buf.readUInt32LE(10);
   var numPixels = this.getWidth() * this.getHeight();
 
   // pixels should be an array of bytes
-  //TODO: Does pixels.length == this.getPixelArray().length?
-  //      What do we do if it doesn't?
-  // if(pixels.length !== numPixels) {
   if(pixels.length > numPixels) {
     throw new Error('param pixels is too long to fit in this bitmap');
   }
@@ -142,6 +138,9 @@ Bitmap.prototype.setPixelArray = function(pixels) {
   var numToWrite = Math.min(pixels.length, numPixels);
   pixels = pixels.slice(0,numToWrite);
   pixels.forEach(function(pixel) {
+    if(!Number.isInteger(pixel)) {
+      throw new Error('invalid color value');
+    }
     if(pixel < 0 || pixel > numColors - 1) {
       throw new Error('color value out of bounds');
     }
