@@ -25,14 +25,16 @@ bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
 });
 
 function switchColorAndSave(bitmap) {
-  var colors = bitmap.getColorArray();
-  colors[0] = {
+  // var colors = bitmap.getColorArray();
+  var white = {
     red: 255,
     blue: 255,
     green: 255,
     alpha: 0
   };
-  bitmap.setColorArray(colors);
+  // colors[0] = white;
+  // bitmap.setColorArray(colors);
+  bitmap.transform(transforms.swapColor(0, white));
   bmHelper.save('./temp/color-swap.bmp', bitmap, function(err) {
     if(err) console.log(err);
     console.log('saved color swap');
