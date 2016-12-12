@@ -52,7 +52,9 @@ describe('Bitmap Constructor', function() {
 
   describe('#getHeight', function() {
     it('should match the height of our test bitmap', function() {
-      //TODO: assert that the height of our test BM matches what we expect.
+      var height = testBitmap.getHeight();
+      expect(height).to.be.a('number');
+      expect(height).to.equal(100);
     });
   });
 
