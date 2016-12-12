@@ -132,18 +132,23 @@ describe('Bitmap Constructor', function() {
         var bm = data;
         var colors = bm.getColorArray();
         bm.setColorArray(colors);
+
         colors = [];
         for (let i = 0; i < colors.length; i++) {
-          expect(colors[i]).to.be.equal(null);
+          // expect(colors[i]).to.be.equal(null);
+          expect(colors[i]).to.be.an('error');
         }
+        
         //TODO: Try an array with bogus or non-color object values.
         bm.setColorArray(colors);
+
         colors = {a: 'puppy', b: 'kitten', c: 'capybara'};
         for (let i = 0; i < colors.length; i++) {
           expect(colors[i]).to.return.err; // NOTE TO SELF: is this err set up yet?
         }
         //TODO: Try with color objects that have invalid values.
         bm.setColorArray(colors);
+
         colors = {yellow: 345, magenta: 800, chartreuse: 256};
         for (let i = 0; i < colors.length; i++) {
           expect(colors[i]).to.return.err;
