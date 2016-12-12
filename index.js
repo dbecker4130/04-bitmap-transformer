@@ -20,8 +20,24 @@ bmHelper.load('./img/palette-bitmap.bmp', function(err, bitMapData) {
 
   // makeBlackAndSave(bitMapData);
   // rotateRightAndSave(bitMapData);
-  rotate180AndSave(bitMapData);
+  // rotate180AndSave(bitMapData);
+  switchColorAndSave(bitMapData);
 });
+
+function switchColorAndSave(bitmap) {
+  var colors = bitmap.getColorArray();
+  colors[0] = {
+    red: 255,
+    blue: 255,
+    green: 255,
+    alpha: 0
+  };
+  bitmap.setColorArray(colors);
+  bmHelper.save('./temp/color-swap.bmp', bitmap, function(err) {
+    if(err) console.log(err);
+    console.log('saved color swap');
+  });
+}
 
 function rotate180AndSave(bitmap) {
   bitmap.transform(transforms.rotate(180));
