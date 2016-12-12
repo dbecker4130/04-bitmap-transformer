@@ -149,9 +149,12 @@ describe('Bitmap Constructor', function() {
     it('should fail with non-color object values', function(done) {
         //TODO: Try an array with bogus or non-color object values.
       helper.load(testFilepath, function(err, data) {
-        var colors = [{a: 'puppy'}, {b: 'kitten'}, {c: 'capybara'}];
+        var bm = data;
+        // let colors = [{a: 'puppy'}, {b: 'kitten'}, {c: 'capybara'}];
+        let colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'magenta'];
         for (let i = 0; i < colors.length; i++) {
-          expect(colors[i]).to.throw('error');
+          // expect(colors[i]).to.throw('error');
+          expect(bm.setColorArray(colors[i])).to.throw('error');
         }
         done();
       });
