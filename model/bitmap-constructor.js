@@ -33,6 +33,9 @@ Bitmap.prototype.getWidth = function() {
 Bitmap.prototype.getHeight = function() {
   return this.buf.readUInt32LE(22);
 };
+Bitmap.prototype.getNumColors = function() {
+  return this.buf.readInt32LE(46);
+};
 Bitmap.prototype.getColorArray = function() {
   var numColors = this.buf.readInt32LE(46);
   var dibSize = this.buf.readUInt32LE(14);
@@ -118,6 +121,10 @@ Bitmap.prototype.setColorArray = function(colors) {
   return this; //To chain seters
 };
 Bitmap.prototype.setPixelArray = function(pixels) {
+  if(!Array.isArray(pixels)) {
+    throw new Error('invalid pixel array');
+  }
+
   //TODO: Possibly make a getPixelOffset method
   var pixelOffset = this.buf.readUInt32LE(10);
   var numPixels = this.getWidth() * this.getHeight();
@@ -125,17 +132,22 @@ Bitmap.prototype.setPixelArray = function(pixels) {
   // pixels should be an array of bytes
   //TODO: Does pixels.length == this.getPixelArray().length?
   //      What do we do if it doesn't?
-  if(pixels.length !== numPixels) {
-    // In an async pattern, we'd return callback(new Error('pixels length does not match'));
-    // However, perhaps we should just write out the
-    // min of either pixels.length or numPixels.
+  // if(pixels.length !== numPixels) {
+  if(pixels.length > numPixels) {
+    throw new Error('param pixels is too long to fit in this bitmap');
   }
 
-  //TODO: Are the values in pixels within the size of our color array?
+  var numColors = this.getNumColors();
 
   var numToWrite = Math.min(pixels.length, numPixels);
+  pixels = pixels.slice(0,numToWrite);
+  pixels.forEach(function(pixel) {
+    if(pixel < 0 || pixel > numColors - 1) {
+      throw new Error('color value out of bounds');
+    }
+  });
 
-  for (let i = 0; i < numToWrite; i++) {
+  for(let i = 0; i < numToWrite; i++) {
     var offset = pixelOffset + i;
     this.buf.writeUInt8(pixels[i], offset);
   }
