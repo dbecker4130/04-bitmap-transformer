@@ -111,13 +111,41 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#setColorArray', function() {
-    it('should correctly alter the color array', function() {
+    it('should correctly alter the color array', function(done) {
       //TODO: Similar process to the other set tests
+      helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
+        var bm = data;
+        var colors = bm.getColorArray();
+        bm.setColorArray(colors);
+        //Now check that we get back the same pixels we just set.
+        for (let i in colors) {
+          expect(colors[i]).to.equal(colors[i]);
+        }
+        done();
+      });
     });
-    it('should fail with bogus values', function() {
+    it('should fail with bogus values', function(done) {
       //TODO: Try with null, empty, strings, etc
-      //TODO: Try an array with bogus or non-color object values.
-      //TODO: Try with color objects that have invalid values.
+      helper.load(testFilepath, function(err, data) {
+        var bm = data;
+        var colors = bm.getColorArray();
+        colors = {};
+        for (let i = 0; i < colors.length; i++) {
+          expect(colors[i]).to.be.an('error');
+        }
+        //TODO: Try an array with bogus or non-color object values.
+        colors = {a: 'puppy', b: 'kitten', c: 'capybara'};
+        for (let i = 0; i < colors.length; i++) {
+          expect(colors[i]).to.return.err; // NOTE TO SELF: is this err set up yet?
+        }
+        //TODO: Try with color objects that have invalid values.
+        colors = {yellow: 345, magenta: 800, chartreuse: 256};
+        for (let i = 0; i < colors.length; i++) {
+          expect(colors[i]).to.return.err;
+        }
+        done();
+      });
     });
   });
 
