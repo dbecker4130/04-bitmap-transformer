@@ -39,15 +39,44 @@ describe('Transform Constructor', function() {
   });
 
   describe('#rotate', function() {
+    var expectedBitmap;
+    before('loading expected bitmap result', function(done) {
+      helper.load('./img/test-rotated-90.bmp', function(err, data) {
+        if(err) return done(err);
+        expectedBitmap = data;
+        done();
+      });
+    });
     it('should fail with bogus angles', function() {
-      //TODO: expect(transforms.rotate(55)).to.fail();
-      //Q: Will a bad or missing angle throw an error, or what?
+      var rotate = transforms.rotate;
+      expect(function() {
+        rotate(55);
+      }).to.throw(Error);
+      expect(function() {
+        rotate(-55);
+      }).to.throw(Error);
+      expect(function() {
+        rotate('goat');
+      }).to.throw(Error);
+      expect(function() {
+        rotate(null);
+      }).to.throw(Error);
     });
-    it('should handle negative angles in multiples of 90', function() {
-
+    it('should handle positive angles in multiples of 90', function(done) {
+      helper.load('./img/palette-bitmap.bmp', function(err, bitmap) {
+        if(err) return done(err);
+        bitmap.transform(transforms.rotate(450));
+        expect(expectedBitmap).to.deep.equal(bitmap);
+        done();
+      });
     });
-    it('should handle positive angles in multiples of 90', function() {
-
+    it('should handle negative angles in multiples of 90', function(done) {
+      helper.load('./img/palette-bitmap.bmp', function(err, bitmap) {
+        if(err) return done(err);
+        bitmap.transform(transforms.rotate(-270));
+        expect(expectedBitmap).to.deep.equal(bitmap);
+        done();
+      });
     });
   });
 

@@ -165,6 +165,8 @@ Bitmap.prototype.setPixelArray = function(pixels) {
 };
 
 Bitmap.prototype.transform = function(operator) {
+  if(!operator) throw new Error('missing operator');
+  //TODO: Determine if operator is a function that takes in a bitmap?!?
   operator(this); //Let the operator mess with this
   return this; //To chain transforms
 };

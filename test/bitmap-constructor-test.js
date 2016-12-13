@@ -235,9 +235,16 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#transform', function() {
-    it('should fail on a bogus or non-conforming operator', function() {
-      //TODO: Try null, empty, non-function
-      //TODO: Try a function that isn't an operation
+    it('should fail on a bogus operator', function() {
+      expect(function() {
+        testBitmap.transform();
+      }).to.throw(Error);
+      expect(function() {
+        testBitmap.transform(null);
+      }).to.throw(Error);
+      expect(function() {
+        testBitmap.transform('grayscale'); //String, not op
+      }).to.throw(Error);
     });
     it('should return the bitmap when complete', function() {
       //TODO: Need a valid test transform to apply on the bitmap.
