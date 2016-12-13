@@ -142,62 +142,30 @@ describe('Bitmap Constructor', function() {
           data.setColorArray({});
         }).to.throw(Error);
         expect(function() {
-          data.setColorArray({notAValidColor: 'capybara'});
+          data.setColorArray({notAValidColor: 123});
         }).to.throw(Error);
-      });
-    });
 
-
-    // START OF OLD TEST CODE
-
-    it('should fail with bogus values', function(done) {
-      //TODO: Try with null, empty, strings, etc
-      helper.load(testFilepath, function(err, data) {
-        if(err) return done(err);
-        var bm = data;
-        var colors = bm.getColorArray();
-        // colors = {}; // TODO object is not array
-        for (let i = 0; i < colors.length; i++) {
-          var tempArray = [];
-          expect(bm.setColorArray(tempArray)).to.throw('error');
-          expect(bm.setColorArray({})).to.throw('error');
-          expect(bm.setColorArray('blah')).to.throw('error');
-          expect(bm.setColorArray([{notAValidColor: 4000}])).to.throw('error');
-        }
         done();
       });
     });
-
-    it('should fail with non-color object values', function(done) {
-        //TODO: Try an array with bogus or non-color object values.
+    it('should fail with non-color objects', function(done) {
       helper.load(testFilepath, function(err, data) {
-        if(err) return done(err);
-        var bm = data;
-        // let colors = [{a: 'puppy'}, {b: 'kitten'}, {c: 'capybara'}];
-        let animals = [{animal: 'kitten'}, {animal: 'puppy'}, {animal: 'capybara'}];
-        for (let i = 0; i < animals.length; i++) {
-          // expect(colors[i]).to.throw('error');
-          expect(bm.setColorArray(animals[i])).to.throw('error');
-        }
+        expect(function() {
+          data.setColorArray({animal: 'capybara'});
+        }).to.throw(Error);
+
         done();
       });
     });
-
     it('should fail with color object that contain invalid values', function(done) {
-        //TODO: Try with color objects that have invalid values.
       helper.load(testFilepath, function(err, data) {
-        if(err) return done(err);
-        var bm = data;
-        var numbers = [{yellow: 345}, {magenta: 800}, {chartreuse: 256}]; // TODO make this an array
-        for (let i = 0; i < numbers.length; i++) {
-          expect(bm.setColorArray(numbers[i])).to.throw('error');
-        }
+        expect(function() {
+          data.setColorArray({red: 300, blue: 300, green: 300, alpha: 300});
+        }).to.throw(Error);
+
         done();
       });
     });
-
-    // END OF OLD CODE
-
   });
 
   describe('#setPixelArray', function() {
