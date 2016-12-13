@@ -27,9 +27,6 @@ describe('Bitmap Constructor', function() {
     });
     it('should create a bitmap with a valid buffer', function() {
       expect(testBitmap).to.be.an.instanceof(Bitmap);
-      //TODO: Where does the buffer get created?
-      //      Do we need to use an async test here?
-      //TODO: Verify that we get a valid bitmap object for the buf
     });
   });
 
