@@ -52,27 +52,17 @@ describe('Bitmap Constructor', function() {
 
   describe('#getHeight', function() {
     it('should match the height of our test bitmap', function() {
-      var height = testBitmap.getHeight();
-      expect(height).to.be.a('number');
-      expect(height).to.equal(100);
+      //TODO: assert that the height of our test BM matches what we expect.
     });
   });
 
   describe('#getColorArray', function() {
     it('should be an array', function() {
-      var colors = testBitmap.getColorArray();
-      expect(colors).to.be.an('array');
-
+      //TODO: Check the typeof
     });
     it('should have elements that are color objects', function() {
-      var colors = testBitmap.getColorArray();
-      colors.forEach(function(color) {
-        expect(color).to.have.property('red');
-        expect(color).to.have.property('green');
-        expect(color).to.have.property('blue');
-        expect(color).to.have.property('alpha');
-      });
-
+      //TODO: Check EACH element of the array to verify that
+      //      they conform to a color object.
     });
     //TODO: Possibly check that it's the size we expect.
   });
@@ -121,13 +111,63 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#setColorArray', function() {
-    it('should correctly alter the color array', function() {
-      //TODO: Similar process to the other set tests
+    it('should correctly alter the color array', function(done) {
+      helper.load(testFilepath, function (err, data) {
+        if(err) return done(err);
+        var bm = data;
+        var colors = bm.getColorArray();
+        var testColor = {red: 111, blue: 111, green: 111, alpha: 111};
+        for (let i in colors) {
+          colors[i] = testColor;
+        }
+        bm.setColorArray(colors);
+        colors = bm.getColorArray();
+        for (let i in colors) {
+          expect (colors[i]).to.deep.equal(testColor);
+        }
+        done();
+      });
     });
-    it('should fail with bogus values', function() {
-      //TODO: Try with null, empty, strings, etc
-      //TODO: Try an array with bogus or non-color object values.
-      //TODO: Try with color objects that have invalid values.
+
+    it('should fail with bogus values', function(done) {
+      helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
+        expect(function() {
+          data.setColorArray();
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray('this is not an array');
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray({});
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray({notAValidColor: 123});
+        }).to.throw(Error);
+        done();
+      });
+    });
+    it('should fail with non-color objects', function(done) {
+      helper.load(testFilepath, function(err, data) {
+        var colors = data.getColorArray();
+        colors[0] = {animal: 'capybara'};
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = 'this is a string';
+        expect(function() {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = null;
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = {red: 300, blue: 300, green: 300, alpha: 300};
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        done();
+      });
     });
   });
 
@@ -153,35 +193,9 @@ describe('Bitmap Constructor', function() {
         done();
       });
     });
-    it('should fail with bogus values', function(done) {
-      helper.load(testFilepath, function(err, bitmap) {
-        if(err) return done(err);
-        expect(function() {
-          bitmap.setPixelArray();
-        }).to.throw(Error);
-        expect(function() {
-          bitmap.setPixelArray('hi there, I am not an array');
-        }).to.throw(Error);
-        expect(function() {
-          bitmap.setPixelArray(null);
-        }).to.throw(Error);
-
-        var pixels = bitmap.getPixelArray();
-        pixels[0] = 'this is not a valid pixel value';
-        expect(function() {
-          bitmap.setPixelArray(pixels);
-        }).to.throw(Error);
-        pixels[0] = 2734734; //Big ass index
-        expect(function() {
-          bitmap.setPixelArray(pixels);
-        }).to.throw(Error);
-        pixels[0] = -200;
-        expect(function() {
-          bitmap.setPixelArray(pixels);
-        }).to.throw(Error);
-
-        done();
-      });
+    it('should fail with bogus values', function() {
+      //TODO: Try with null, empty, strings, etc
+      //TODO: Try an array with some bogus and/or out of range numbers.
     });
   });
 

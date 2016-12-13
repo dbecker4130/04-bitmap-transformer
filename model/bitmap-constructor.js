@@ -33,9 +33,6 @@ Bitmap.prototype.getWidth = function() {
 Bitmap.prototype.getHeight = function() {
   return this.buf.readUInt32LE(22);
 };
-Bitmap.prototype.getNumColors = function() {
-  return this.buf.readInt32LE(46);
-};
 Bitmap.prototype.getColorArray = function() {
   var numColors = this.buf.readInt32LE(46);
   var dibSize = this.buf.readUInt32LE(14);
@@ -90,24 +87,34 @@ Bitmap.prototype.setColorArray = function(colors) {
   //TODO: Check length of colors = this.getColorArray()
   if(colors.length !== numColors) {
     // What does in here? Return an error?
+    // return new Error;
+    throw new Error('number of colors does not match up');
   }
   //TODO: Check that the items in the array are valid color objects
   //        { red, blue, green, alpha } Order doesn't matter.
   // NOTE line 95 - 106 to be put back in at later time, do not delete
-  /*
+
   for (let i = 0; i < numColors; i++) {
     // if (colors[i])
     if (typeof(colors[i]) !== 'object') {
       // return error? what do we want to do here?
+      // return new Error;
+      throw new Error('colors array does not contain objects');
     }
     if ((!colors[i].hasOwnProperty('blue')) || (!colors[i].hasOwnProperty('red')) || (!colors[i].hasOwnProperty('green')) || (!colors[i].hasOwnProperty('alpha'))) {
       // return error? what do we want to do here?
+      // return new Error;
+      throw new Error('color object does not contain correct keys');
+      // )
     }
     if ((colors[i].blue > 255) || (colors[i].red > 255) || (colors[i].green > 255) || (colors[i].alpha > 255)) {
-      // return error? what do we want to do here?
+      throw new Error('color values are out of bounds');
+    }
+    if ((colors[i].blue < 0) || (colors[i].red < 0) || (colors[i].green < 0) || (colors[i].alpha < 0)) {
+      throw new Error('color values are negative');
     }
   }
-  */
+
   //TODO: Write the colors array back into this.buf
   //TODO: Make sure for each color object, that we write
   //      the bytes in the correct order. See getColorArray
@@ -121,32 +128,24 @@ Bitmap.prototype.setColorArray = function(colors) {
   return this; //To chain seters
 };
 Bitmap.prototype.setPixelArray = function(pixels) {
-  if(!Array.isArray(pixels)) {
-    throw new Error('invalid pixel array');
-  }
   //TODO: Possibly make a getPixelOffset method
   var pixelOffset = this.buf.readUInt32LE(10);
   var numPixels = this.getWidth() * this.getHeight();
 
   // pixels should be an array of bytes
-  if(pixels.length > numPixels) {
-    throw new Error('param pixels is too long to fit in this bitmap');
+  //TODO: Does pixels.length == this.getPixelArray().length?
+  //      What do we do if it doesn't?
+  if(pixels.length !== numPixels) {
+    // In an async pattern, we'd return callback(new Error('pixels length does not match'));
+    // However, perhaps we should just write out the
+    // min of either pixels.length or numPixels.
   }
 
-  var numColors = this.getNumColors();
+  //TODO: Are the values in pixels within the size of our color array?
 
   var numToWrite = Math.min(pixels.length, numPixels);
-  pixels = pixels.slice(0,numToWrite);
-  pixels.forEach(function(pixel) {
-    if(!Number.isInteger(pixel)) {
-      throw new Error('invalid color value');
-    }
-    if(pixel < 0 || pixel > numColors - 1) {
-      throw new Error('color value out of bounds');
-    }
-  });
 
-  for(let i = 0; i < numToWrite; i++) {
+  for (let i = 0; i < numToWrite; i++) {
     var offset = pixelOffset + i;
     this.buf.writeUInt8(pixels[i], offset);
   }
