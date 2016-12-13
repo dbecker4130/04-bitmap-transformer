@@ -52,17 +52,27 @@ describe('Bitmap Constructor', function() {
 
   describe('#getHeight', function() {
     it('should match the height of our test bitmap', function() {
-      //TODO: assert that the height of our test BM matches what we expect.
+      var height = testBitmap.getHeight();
+      expect(height).to.be.a('number');
+      expect(height).to.equal(100);
     });
   });
 
   describe('#getColorArray', function() {
     it('should be an array', function() {
-      //TODO: Check the typeof
+      var colors = testBitmap.getColorArray();
+      expect(colors).to.be.an('array');
+
     });
     it('should have elements that are color objects', function() {
-      //TODO: Check EACH element of the array to verify that
-      //      they conform to a color object.
+      var colors = testBitmap.getColorArray();
+      colors.forEach(function(color) {
+        expect(color).to.have.property('red');
+        expect(color).to.have.property('green');
+        expect(color).to.have.property('blue');
+        expect(color).to.have.property('alpha');
+      });
+
     });
     //TODO: Possibly check that it's the size we expect.
   });
