@@ -52,3 +52,26 @@ exports.swapColor = function(index, color) {
     bitmap.setColorArray(colors);
   };
 };
+
+exports.grayScale = function(bitmap) {
+  if(!bitmap) return;
+
+  // get color array
+  var colors = bitmap.getColorArray();
+  // alter color array
+
+  for(let i = 0; i < colors.length; i++) {
+    let color = colors[i];
+    let r = color.red;
+    let g = color.green;
+    let b = color.blue;
+    var average = (r + g + b)/3;
+    average = Math.floor(average);
+    color.red = average;
+    color.green = average;
+    color.blue = average;
+
+  }
+  // set color array back
+  bitmap.setColorArray(colors);
+};
