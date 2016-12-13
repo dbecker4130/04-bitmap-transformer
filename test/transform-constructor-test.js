@@ -50,4 +50,25 @@ describe('Transform Constructor', function() {
 
     });
   });
+
+  describe('#grayScale', function() {
+    var expectedBitmap;
+    before('loading expected bitmap result', function(done) {
+      helper.load('./img/test-grayscale.bmp', function(err, data) {
+        if(err) return done(err);
+        expectedBitmap = data;
+        done();
+      });
+    });
+    it('should average rbg and return grayscale image', function(done) {
+      helper.load('./img/palette-bitmap.bmp', function(err, data) {
+        if(err) return done(err);
+        var bm = data;
+        bm.transform(transforms.grayScale);
+        expect(expectedBitmap).to.deep.equal(bm);
+        done();
+      });
+    });
+  });
+
 });
