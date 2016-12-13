@@ -154,11 +154,11 @@ describe('Bitmap Constructor', function() {
         expect(function () {
           data.setColorArray(colors);
         }).to.throw(Error);
-        colors[0] = {aString: 'this is a string'};
+        colors[0] = 'this is a string';
         expect(function() {
           data.setColorArray(colors);
         }).to.throw(Error);
-        colors[0] = {blue: 6000};
+        colors[0] = null;
         expect(function () {
           data.setColorArray(colors);
         }).to.throw(Error);
