@@ -100,4 +100,44 @@ describe('Transform Constructor', function() {
     });
   });
 
+  describe('#stripeOne', function() {
+    var expectedBitmap;
+    before('loading expected bitmap result', function(done) {
+      helper.load('./img/test-stripe-one.bmp', function(err, data) {
+        if(err) return done(err);
+        expectedBitmap = data;
+        done();
+      });
+    });
+    it('should have every other pixel be black', function(done) {
+      helper.load('./img/palette-bitmap.bmp', function(err, data) {
+        if(err) return done(err);
+        var bm = data;
+        bm.transform(transforms.stripeOne);
+        expect(expectedBitmap).to.deep.equal(bm);
+        done();
+      });
+    });
+  });
+
+  describe('#stripeTwo', function() {
+    var expectedBitmap;
+    before('loading expected bitmap result', function(done) {
+      helper.load('./img/test-stripe-two.bmp', function(err, data) {
+        if(err) return done(err);
+        expectedBitmap = data;
+        done();
+      });
+    });
+    it('should have every other pixel be black', function(done) {
+      helper.load('./img/test-stripe-one.bmp', function(err, data) {
+        if(err) return done(err);
+        var bm = data;
+        bm.transform(transforms.stripeTwo);
+        expect(expectedBitmap).to.deep.equal(bm);
+        done();
+      });
+    });
+  });
+
 });

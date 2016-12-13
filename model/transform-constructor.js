@@ -75,3 +75,19 @@ exports.grayScale = function(bitmap) {
   // set color array back
   bitmap.setColorArray(colors);
 };
+
+exports.stripeOne = function(bitmap) {
+  var pixels = bitmap.getPixelArray();
+  for (var i = 0; i < pixels.length; i = i + 2) {
+    pixels[i] = 0; // setting every other pixel to black
+  }
+  bitmap.setPixelArray(pixels);
+};
+
+exports.stripeTwo = function(bitmap) {
+  var pixels = bitmap.getPixelArray();
+  for (var i = 1; i < pixels.length; i = i + 2) {
+    pixels[i] = 0; // setting every other pixel to black, offset by one
+  }
+  bitmap.setPixelArray(pixels);
+};
