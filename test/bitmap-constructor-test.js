@@ -121,13 +121,62 @@ describe('Bitmap Constructor', function() {
   });
 
   describe('#setColorArray', function() {
-    it('should correctly alter the color array', function() {
-      //TODO: Similar process to the other set tests
+    it('should correctly alter the color array', function(done) {
+      helper.load(testFilepath, function (err, data) {
+        if(err) return done(err);
+        var bm = data;
+        var colors = bm.getColorArray();
+        var testColor = {red: 111, blue: 111, green: 111, alpha: 111};
+        for (let i in colors) {
+          colors[i] = testColor;
+        }
+        bm.setColorArray(colors);
+        colors = bm.getColorArray();
+        for (let i in colors) {
+          expect (colors[i]).to.deep.equal(testColor);
+        }
+        done();
+      });
     });
-    it('should fail with bogus values', function() {
-      //TODO: Try with null, empty, strings, etc
-      //TODO: Try an array with bogus or non-color object values.
-      //TODO: Try with color objects that have invalid values.
+    it('should fail with bogus values', function(done) {
+      helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
+        expect(function() {
+          data.setColorArray();
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray('this is not an array');
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray({});
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray({notAValidColor: 123});
+        }).to.throw(Error);
+        done();
+      });
+    });
+    it('should fail with non-color objects', function(done) {
+      helper.load(testFilepath, function(err, data) {
+        var colors = data.getColorArray();
+        colors[0] = {animal: 'capybara'};
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = 'this is a string';
+        expect(function() {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = null;
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = {red: 300, blue: 300, green: 300, alpha: 300};
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        done();
+      });
     });
   });
 
