@@ -130,6 +130,27 @@ describe('Bitmap Constructor', function() {
     });
 
     it('should fail with bogus values', function(done) {
+      helper.load(testFilepath, function(err, data) {
+        if(err) return done(err);
+        expect(function() {
+          data.setColorArray();
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray('this is not an array');
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray({});
+        }).to.throw(Error);
+        expect(function() {
+          data.setColorArray({notAValidColor: 'capybara'});
+        }).to.throw(Error);
+      });
+    });
+
+
+    // START OF OLD TEST CODE
+
+    it('should fail with bogus values', function(done) {
       //TODO: Try with null, empty, strings, etc
       helper.load(testFilepath, function(err, data) {
         if(err) return done(err);
@@ -174,6 +195,9 @@ describe('Bitmap Constructor', function() {
         done();
       });
     });
+
+    // END OF OLD CODE
+
   });
 
   describe('#setPixelArray', function() {
