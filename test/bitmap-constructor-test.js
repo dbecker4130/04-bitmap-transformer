@@ -162,13 +162,9 @@ describe('Bitmap Constructor', function() {
         expect(function () {
           data.setColorArray(colors);
         }).to.throw(Error);
-        done();
-      });
-    });
-    it('should fail with color object that contain invalid values', function(done) {
-      helper.load(testFilepath, function(err, data) {
-        expect(function() {
-          data.setColorArray({red: 300, blue: 300, green: 300, alpha: 300});
+        colors[0] = {red: 300, blue: 300, green: 300, alpha: 300};
+        expect(function () {
+          data.setColorArray(colors);
         }).to.throw(Error);
         done();
       });
