@@ -1,26 +1,20 @@
 'use strict';
 
 function Bitmap(buf) {
-  //TODO: What happens if !buf ?
-  //TODO: Make buf a private property.
+  if(!buf) throw new Error('missing source buffer');
+  //tODO: Make buf a private property.
   this.buf = buf;
 
-  //TODO: check that the type is what we can handle/expect.
-  //TODO: Verify that numColors > 0
-  //TODO: What else can/should be checked at the time of creation?
+  if(this.getType() !== 'BM') throw new Error('unknown type, should be BM');
 
-  //NOTE: the first row of the image is the bottom row
+  if(this.getNumColors() < 0) throw new Error('num colors should be a positive integer');
+
+  let w = this.getWidth();
+  let h = this.getHeight();
+  if(this.getPixelArray().length !== w * h) throw new Error('pixel array size does not equal w * h');
+
+  //note: the first row of the image is the bottom row
 }
-
-//TODO: Consider the following alternative to setting
-//      each method individually:
-/*
-Bitmap.prototype = {
-  getType: function() { ... },
-  getWidth: function() { ... },
-  ...
-};
-*/
 
 // ---------- GETTERS -----------------
 
@@ -39,8 +33,6 @@ Bitmap.prototype.getNumColors = function() {
 Bitmap.prototype.getColorArray = function() {
   var numColors = this.buf.readInt32LE(46);
   var dibSize = this.buf.readUInt32LE(14);
-
-  // TODO: Verify that numColors > 0
 
   var colors = [];
   var pos = dibSize + 14;
@@ -93,9 +85,6 @@ Bitmap.prototype.setColorArray = function(colors) {
     // return new Error;
     throw new Error('number of colors does not match up');
   }
-  //TODO: Check that the items in the array are valid color objects
-  //        { red, blue, green, alpha } Order doesn't matter.
-  // NOTE line 95 - 106 to be put back in at later time, do not delete
 
   for (let i = 0; i < numColors; i++) {
     // if (colors[i])
@@ -118,9 +107,6 @@ Bitmap.prototype.setColorArray = function(colors) {
     }
   }
 
-  //TODO: Write the colors array back into this.buf
-  //TODO: Make sure for each color object, that we write
-  //      the bytes in the correct order. See getColorArray
   var position = dibSize + 14;
   for (let i = 0; i < numColors; i++) {
     this.buf.writeUInt8(colors[i].blue, position++);
@@ -134,17 +120,16 @@ Bitmap.prototype.setPixelArray = function(pixels) {
   if(!Array.isArray(pixels)) {
     throw new Error('invalid pixel array');
   }
-  //TODO: Possibly make a getPixelOffset method
+  //tODO: Possibly make a getPixelOffset method
   var pixelOffset = this.buf.readUInt32LE(10);
   var numPixels = this.getWidth() * this.getHeight();
 
-  // pixels should be an array of bytes
   if(pixels.length > numPixels) {
     throw new Error('param pixels is too long to fit in this bitmap');
   }
 
+  // pixels should be an array of integers in the range [0, numColors -1];
   var numColors = this.getNumColors();
-
   var numToWrite = Math.min(pixels.length, numPixels);
   pixels = pixels.slice(0,numToWrite);
   pixels.forEach(function(pixel) {
