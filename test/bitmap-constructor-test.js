@@ -20,13 +20,13 @@ describe('Bitmap Constructor', function() {
 
   describe('#Bitmap', function() {
     it('should fail on a bogus buffer', function() {
-      //TODO: Try new Bitmap() and new Bitmap(junk)
+      expect(function() {
+        new Bitmap(); //empty/missing buffer
+      }).to.throw(Error);
+      //TODO: Create buffers with some bogus values to test
     });
     it('should create a bitmap with a valid buffer', function() {
       expect(testBitmap).to.be.an.instanceof(Bitmap);
-      //TODO: Where does the buffer get created?
-      //      Do we need to use an async test here?
-      //TODO: Verify that we get a valid bitmap object for the buf
     });
   });
 
