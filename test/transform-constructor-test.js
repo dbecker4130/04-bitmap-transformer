@@ -62,7 +62,7 @@ describe('Transform Constructor', function() {
         rotate(null);
       }).to.throw(Error);
     });
-    it('should handle negative angles in multiples of 90', function(done) {
+    it('should handle positive angles in multiples of 90', function(done) {
       helper.load('./img/palette-bitmap.bmp', function(err, bitmap) {
         if(err) return done(err);
         bitmap.transform(transforms.rotate(450));
@@ -70,7 +70,7 @@ describe('Transform Constructor', function() {
         done();
       });
     });
-    it('should handle positive angles in multiples of 90', function(done) {
+    it('should handle negative angles in multiples of 90', function(done) {
       helper.load('./img/palette-bitmap.bmp', function(err, bitmap) {
         if(err) return done(err);
         bitmap.transform(transforms.rotate(-270));
