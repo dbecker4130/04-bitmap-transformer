@@ -108,7 +108,10 @@ Bitmap.prototype.setColorArray = function(colors) {
       // )
     }
     if ((colors[i].blue > 255) || (colors[i].red > 255) || (colors[i].green > 255) || (colors[i].alpha > 255)) {
-      // return error? what do we want to do here?
+      throw new Error('color values are out of bounds');
+    }
+    if ((colors[i].blue < 0) || (colors[i].red < 0) || (colors[i].green < 0) || (colors[i].alpha < 0)) {
+      throw new Error('color values are negative');
     }
   }
 

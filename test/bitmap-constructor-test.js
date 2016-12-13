@@ -144,16 +144,24 @@ describe('Bitmap Constructor', function() {
         expect(function() {
           data.setColorArray({notAValidColor: 123});
         }).to.throw(Error);
-
         done();
       });
     });
     it('should fail with non-color objects', function(done) {
       helper.load(testFilepath, function(err, data) {
-        expect(function() {
-          data.setColorArray({animal: 'capybara'});
+        var colors = data.getColorArray();
+        colors[0] = {animal: 'capybara'};
+        expect(function () {
+          data.setColorArray(colors);
         }).to.throw(Error);
-
+        colors[0] = {aString: 'this is a string'};
+        expect(function() {
+          data.setColorArray(colors);
+        }).to.throw(Error);
+        colors[0] = {blue: 6000};
+        expect(function () {
+          data.setColorArray(colors);
+        }).to.throw(Error);
         done();
       });
     });
@@ -162,7 +170,6 @@ describe('Bitmap Constructor', function() {
         expect(function() {
           data.setColorArray({red: 300, blue: 300, green: 300, alpha: 300});
         }).to.throw(Error);
-
         done();
       });
     });
