@@ -84,14 +84,15 @@ describe('Bitmap Constructor', function() {
       expect(pixels).to.be.an('array');
     });
     it('should have elements that are numbers', function() {
-      //TODO: Test for different size color tables, but
+      //tODO: Test for different size color tables, but
       //      for now we can just test our single case.
       var pixels    = testBitmap.getPixelArray();
       var numPixels = testBitmap.getWidth() * testBitmap.getHeight();
+      var numColors = testBitmap.getNumColors();
       expect(pixels).to.have.lengthOf(numPixels);
-      //TODO: Iterate the array to see if the values
-      //      are in the range we expect.
-      //  OR  We can compare the SHA of pixels to a known result.
+      pixels.forEach(function(pixel) {
+        expect(pixel).to.be.within(0, numColors - 1);
+      });
     });
   });
 
