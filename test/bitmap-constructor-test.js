@@ -247,7 +247,17 @@ describe('Bitmap Constructor', function() {
         testBitmap.transform('grayscale'); //String, not op
       }).to.throw(Error);
     });
-    it('should return the bitmap when complete', function() {
+    it('should return the bitmap when complete', function(done) {
+      helper.load('./img/palette-bitmap.bmp', function(err, bitmap) {
+        if(err) return done(err);
+        var check = bitmap.transform(function(bitmap) {
+          //no op
+        });
+        expect(bitmap).to.equal(check);
+        done();
+      });
+
+
       //TODO: Need a valid test transform to apply on the bitmap.
       //TODO: Make sure that the transform op returns the test bitmap.
     });
